@@ -9,6 +9,10 @@ class User < ApplicationRecord
   private
 
   def async_update
+    UpdateUserJob.perform_later(self.id)
+  end
+
+  def async_thank_you
     ThankYouJob.set(wait_until: Date.tomorrow.noon).perform_later
   end
 end
